@@ -7,9 +7,9 @@ return [
         'action' => 'index',
     ],
 
-    'account/login' => [
-        'controller' => 'account',
-        'action' => 'login',
+    'contacts' => [
+        'controller' => 'main',
+        'action' => 'contact',
     ],
 
 
