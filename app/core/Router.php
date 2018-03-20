@@ -10,7 +10,7 @@ class Router
 
     function __construct()
     {
-        $arr = require($_SERVER['DOCUMENT_ROOT'].'\app\config\routes.php');
+        $arr = require($_SERVER['DOCUMENT_ROOT'].'/app/config/routes.php');
         foreach ($arr as $key => $val) {
             $this->add($key, $val);
         }
