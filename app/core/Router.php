@@ -10,7 +10,7 @@ class Router
 
     function __construct()
     {
-        $arr = require($_SERVER['DOCUMENT_ROOT'].'/app/config/routes.php');
+        $arr = require($_SERVER['DOCUMENT_ROOT'] . '/app/config/routes.php');
         foreach ($arr as $key => $val) {
             $this->add($key, $val);
         }
@@ -46,14 +46,13 @@ class Router
     function run()
     {
         if ($this->match()) {
-            $path = 'app\controller\\'.ucfirst($this->params['controller']).'Controller';
-            if (class_exists($path)){
-                $action = $this->params['action'].'Action';
-                if (method_exists($path, $action)){
-                   $controller = new $path($this->params);
-                   $controller->$action();
-                }
-                else{
+            $path = 'app\controller\\' . ucfirst($this->params['controller']) . 'Controller';
+            if (class_exists($path)) {
+                $action = $this->params['action'] . 'Action';
+                if (method_exists($path, $action)) {
+                    $controller = new $path($this->params);
+                    $controller->$action();
+                } else {
                     echo 'No Action found';
                 }
             }
