@@ -17,13 +17,31 @@ class Db
                 ';dbname=' . $config['dbname'] . ';charset=' . $config['charset'];
 
             $this->db = new PDO($dsn, $config['user'], $config['password']);
-        }
-        catch(PDOException $error) {
+        } catch (PDOException $error) {
             echo $error->getMessage();
         }
     }
 
-    public function query($sql, $params = []) {
+    /**
+     * @param string $sql query(sql format)
+     * @param array $params additional
+     * @return array
+     */
+
+    public function getRow($sql, $params = [])
+    {
+        $result = $this->query($sql, $params);
+        return $result->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * @param string $sql query(sql format)
+     * @param array $params additional
+     * @return \PDOStatement
+     */
+
+    protected function query($sql, $params = [])
+    {
         $stmt = $this->db->prepare($sql);
         if (!empty($params)) {
             foreach ($params as $key => $val) {
@@ -32,16 +50,11 @@ class Db
                 } else {
                     $type = PDO::PARAM_STR;
                 }
-                $stmt->bindValue(':'.$key, $val, $type);
+                $stmt->bindValue(':' . $key, $val, $type);
             }
         }
         $stmt->execute();
         return $stmt;
-    }
-
-    public function getRow($sql, $params = []) {
-        $result = $this->query($sql, $params);
-        return $result->fetchAll(PDO::FETCH_ASSOC);
     }
 
 }

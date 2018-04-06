@@ -8,7 +8,7 @@ class Router
     protected $routes = [];
     protected $params = [];
 
-    function __construct()
+    public function __construct()
     {
         $arr = require($_SERVER['DOCUMENT_ROOT'] . '/app/config/routes.php');
         foreach ($arr as $key => $val) {
@@ -20,30 +20,14 @@ class Router
      * @param $route string
      * @param $params array
      */
-    function add($route, $params)
+    protected function add($route, $params)
     {
         $route = '~^' . $route . '$~';
         $this->routes[$route] = $params;
 
     }
 
-    /**
-     * @return bool
-     */
-
-    function match()
-    {
-        $url = trim($_SERVER['REQUEST_URI'], '/');
-        foreach ($this->routes as $route => $params) {
-            if (preg_match($route, $url, $matches)) {
-                $this->params = $params;
-                return true;
-            }
-        }
-        return false;
-    }
-
-    function run()
+    public function run()
     {
         if ($this->match()) {
             $path = 'app\controller\\' . ucfirst($this->params['controller']) . 'Controller';
@@ -56,6 +40,24 @@ class Router
                     echo 'No Action found';
                 }
             }
+        } else {
+            echo 'No Controller found';
         };
+    }
+
+    /**
+     * @return bool
+     */
+
+    protected function match()
+    {
+        $url = trim($_SERVER['REQUEST_URI'], '/');
+        foreach ($this->routes as $route => $params) {
+            if (preg_match($route, $url, $matches)) {
+                $this->params = $params;
+                return true;
+            }
+        }
+        return false;
     }
 }

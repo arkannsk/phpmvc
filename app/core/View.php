@@ -4,10 +4,23 @@ namespace app\core;
 
 class View
 {
-
+    /**
+     * @var string path to controller-action
+     */
     public $path;
+    /**
+     * @var string basic page route
+     */
     public $route;
+    /**
+     * @var string name of basic page layout
+     */
     public $layout = 'default';
+    /**
+     * @var string meta tag title
+     */
+    public $title;
+
 
     public function __construct($route)
     {
@@ -15,10 +28,19 @@ class View
         $this->path = $route['controller'] . '/' . $route['action'];
     }
 
-    public function render($title, $vars = [])
+    /**
+     * @param array $params
+     */
+
+    public function render($params = [])
     {
-        ob_start();
-        require 'app/view/layout/' . $this->layout . '.php';
+        $path = 'app/view/'.$this->path.'.php';
+        if (file_exists($path)) {
+            ob_start();
+            require $path;
+            $content = ob_get_clean();
+            require 'app/view/layout/'.$this->layout.'.php';
+        }
     }
 
 }
